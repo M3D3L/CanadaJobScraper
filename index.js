@@ -6,28 +6,27 @@ const puppeteer = require("puppeteer");
 const timeout = Math.floor(Math.random() * 1000);
 //****************MODIFY THESE VALUES****************//
 const name = "Guillermo Medel";
-const phone = "";
+const phone = "+1 236-998-8668";
 //*****Number of pages you would like to scrape***********//
-const numberOfPages = 20;
+let numberOfPages = 50;
 //search parameters job title and province
-const jobTitle = "";
+const jobTitle = "Developer";
 const province = "";
 //*****Your email and password for emails***********//
 const email = "guillermoantoniomedel@gmail.com";
 //*****Get Google App Password here https://myaccount.google.com/apppasswords***********//
-const password = "";
+const password = "sepljgxtlmlsyeed";
 
 //****************Settings****************//
 const saveToDb = true;
-const saveToCSV = true;
-const sendEmails = true;
+const saveToCSV = false;
+const sendEmails = false;
 
 //email settings remove from html template if not in use and remove replace script below//
-const facebook = "";
-const linkedin = "";
-const twitter = "";
-const profilePic = "";
-//the current email template has 6 skills
+const facebook = "https://www.facebook.com/profile.php?id=100083237295759";
+const linkedin = "https://www.linkedin.com/in/guillermo-medel-9a4465151/";
+const twitter = "https://twitter.com/GmoMedel";
+const profilePic = "https://guillermomedel.com/email/me.jpg";
 const skills = ["Websites", "Scraping", "Shopify", "Apps", "SEO", "Emails"];
 const emailTitleLine1 = "Happy Holidays!";
 const emailTitleLine2 = "Add me to your roster for 2023!";
@@ -56,17 +55,14 @@ const baseUrl = "https://www.jobbank.gc.ca";
     await page.type("#searchString", jobTitle);
     if (province !== "") {
       await page.type("#locationstring", province);
-      console.log("Searching for " + jobTitle + " in " + province + "🍁🦫");
+      console.log("Searching for " + jobTitle + " in " + province + "🇨🇦🍁🦫🏒");
     } else {
-      console.log("Searching for " + jobTitle + " jobs in all of Canada 🍁🦫");
+      console.log("Searching for " + jobTitle + " jobs in all of Canada 🇨🇦🍁🦫🏒");
     }
+  } else if(province !== "") {
+    console.log("Searching for all jobs in " + province + "🇨🇦🍁🦫🏒");
   } else {
-    console.log("Searching all Jobs");
-    if (province !== "") {
-      console.log("Searching for jobs in " + province + "🍁🦫");
-    } else {
-      console.log("Searching for jobs in all of Canada 🍁🦫");
-    }
+    console.log("Searching for all jobs in Canada 🇨🇦🍁🦫🏒");
   }
 
   await page.click("#searchButton");
@@ -78,14 +74,16 @@ const baseUrl = "https://www.jobbank.gc.ca";
     const moreButton = await page.$("#moreresultbutton");
     if (moreButton) {
       await moreButton.evaluate((b) => b.click());
-      console.log(i + " page(s) loaded 📄 out of " + numberOfPages);
+      console.log(i + " page(s) 📄 loaded out of " + numberOfPages);
       await page.waitForTimeout(timeout);
     } else {
-      console.log(`No more results after ${i} pages 😔`);
+      console.log(`No more results after ${i--} pages 😔`);
       console.log(
-        `Please try again with the numberOfPages set to ${i} or less`
+        `Setting the number of pages to ${i--}`
       );
-      break;
+      //await timout(1000);
+      await page.waitForTimeout(timeout) * 10;
+      numberOfPages = i - 1;
     }
   }
 
@@ -114,21 +112,41 @@ const baseUrl = "https://www.jobbank.gc.ca";
       console.log("jobTitle, business, or jobUrl is null");
     }
 
-
-    
     //console.log the interval of jobs loaded
 
-    console.log(i + " job(s) loaded");
+    console.log((i + 1) + " job(s) loaded");
   }
-
+  let j = 0;
+  let k = ["🌕", "🛸", "☄️", "🌠", "🌎"];
+  let l = 0;
   //begin the loop to open each job and scrape the email address aka howToApply
   for (let i = 0; i < jobArray.length; i++) {
-    //if i is odd
-    if (i % 2) {
-      console.log(`Scraping job ${i} of ${jobArray.length} 🚀`);
+    //console.log and toggle betwtween three dots to show progress
+    if (j === 0) {
+      console.log("Loading job " + i + " of " + jobArray.length + "🚀");
+      j++;
+    } else if (j === 1) {
+      console.log("Loading job " + i + " of " + jobArray.length + "🔥🚀");
+      j++;
+    } else if (j === 2) {
+      console.log("Loading job " + i + " of " + jobArray.length + "🔥🔥🚀");
+      j++;
+      //fire emoji
+    } else if (j === 3) {
+      console.log("Loading job " + i + " of " + jobArray.length + "🔥🔥🔥🚀");
+      j++;
     } else {
-      console.log(`Scraping job ${i} of ${jobArray.length} 🔥🚀`);
+      console.log(
+        "Loading job " + i + " of " + jobArray.length + "🔥🔥🔥🔥🚀" + `${k[l]}`
+      );
+      j = 0;
+      if (l < 4) {
+        l++;
+      } else {
+        l = 0;
+      }
     }
+
     const newPage = await browser.newPage();
     await newPage.goto(jobArray[i].jobUrl);
     //optional deleting since the jobUrl is no longer needed
@@ -142,16 +160,19 @@ const baseUrl = "https://www.jobbank.gc.ca";
     //load the html from the new page and use cheerio to select the howToApply
     const newHtml = await newPage.content();
     const $$ = cheerio.load(newHtml);
-    
+
     await newPage.waitForSelector("#howtoapply");
     const howToApply = $$("#howtoapply > p > a").text();
     if (howToApply) {
       //add the howToApply to the job object
       jobArray[i].howToApply = howToApply;
+      console.log("Scraped email " + howToApply);
     } else {
-      console.log("email is null");
+      //delete the job object if there is no howToApply and continue the loop
+      delete jobArray[i];
+      console.log("howToApply is null");
+      continue;
     }
-    console.log(`closing job ${i} of ${jobArray.length}`);
     //close the new page
     await newPage.close();
   }
@@ -255,37 +276,35 @@ const baseUrl = "https://www.jobbank.gc.ca";
         function (err, row) {
           console.log(
             row.id +
-            ": " +
-            row.jobTitle +
-            " " +
-            row.business +
-            " " +
-            row.howToApply
+              ": " +
+              row.jobTitle +
+              " " +
+              row.business +
+              " " +
+              row.howToApply
           );
         }
       );
     });
     db.close();
     //setTimeout to know when the database is closed
-    
+
     console.log("Database saved 🤖");
   }
 
   //optional save the jobArray to a csv file
   if (saveToCSV) {
-    const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+    const createCsvWriter = require("csv-writer").createObjectCsvWriter;
     const csvWriter = createCsvWriter({
-      path: 'jobs.csv',
+      path: "jobs.csv",
       header: [
-        { id: 'jobTitle', title: 'Job Title' },
-        { id: 'business', title: 'Business' },
-        { id: 'howToApply', title: 'Email' },
-      ]
+        { id: "jobTitle", title: "Job Title" },
+        { id: "business", title: "Business" },
+        { id: "howToApply", title: "Email" },
+      ],
     });
 
-    csvWriter
-      .writeRecords(jobArray)
-      .then(() => console.log("Saved to CSV 📝"));
+    csvWriter.writeRecords(jobArray).then(() => console.log("Saved to CSV 📝"));
   }
 
   //close the browser and end the program
