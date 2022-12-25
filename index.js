@@ -7,10 +7,10 @@ const timeout = Math.floor(Math.random() * 1000);
 //****************MODIFY THESE VALUES****************//
 const name = "Guillermo Medel";
 const phone = "+1 236-998-8668";
-//*****Number of pages you would like to scrape***********//
-let numberOfPages = 50;
+//*****Number of pages you would like to scrape if not enough results it defaults to max pages***********//
+let numberOfPages = 100;
 //search parameters job title and province
-const jobTitle = "Developer";
+const jobTitle = "";
 const province = "";
 //*****Your email and password for emails***********//
 const email = "guillermoantoniomedel@gmail.com";
@@ -19,7 +19,7 @@ const password = "sepljgxtlmlsyeed";
 
 //****************Settings****************//
 const saveToDb = true;
-const saveToCSV = false;
+const saveToCSV = true;
 const sendEmails = false;
 
 //email settings remove from html template if not in use and remove replace script below//
@@ -57,9 +57,11 @@ const baseUrl = "https://www.jobbank.gc.ca";
       await page.type("#locationstring", province);
       console.log("Searching for " + jobTitle + " in " + province + "🇨🇦🍁🦫🏒");
     } else {
-      console.log("Searching for " + jobTitle + " jobs in all of Canada 🇨🇦🍁🦫🏒");
+      console.log(
+        "Searching for " + jobTitle + " jobs in all of Canada 🇨🇦🍁🦫🏒"
+      );
     }
-  } else if(province !== "") {
+  } else if (province !== "") {
     console.log("Searching for all jobs in " + province + "🇨🇦🍁🦫🏒");
   } else {
     console.log("Searching for all jobs in Canada 🇨🇦🍁🦫🏒");
@@ -78,11 +80,9 @@ const baseUrl = "https://www.jobbank.gc.ca";
       await page.waitForTimeout(timeout);
     } else {
       console.log(`No more results after ${i--} pages 😔`);
-      console.log(
-        `Setting the number of pages to ${i--}`
-      );
+      console.log(`Setting the number of pages to ${i--}`);
       //await timout(1000);
-      await page.waitForTimeout(timeout) * 10;
+      (await page.waitForTimeout(timeout)) * 7;
       numberOfPages = i - 1;
     }
   }
@@ -99,22 +99,35 @@ const baseUrl = "https://www.jobbank.gc.ca";
     const jobTitle = $(jobList[i]).find(".noctitle").text().split("\n")[0];
     const list = $(jobList[i]).find(".list-unstyled");
     const business = list.find(".business").text().split("\n")[0];
+    //let location = remove any white space
+
+    const location = list
+      .find(".location")
+      .text()
+      .split("\n, span")
+      .filter((item) => item !== "")
+      .join(", ");
+
+    const salary = list
+      .find(".salary")
+      .text()
+      .split("\n, span")
+      .filter((item) => item !== "")
+      .join(", ");
+
     const jobUrl = baseUrl + $(jobList[i]).find("a").attr("href");
 
-    //make sure the job has a jobTitle and business
-    if (jobTitle !== null || business !== null || jobUrl !== null) {
-      jobArray.push({
-        jobTitle,
-        business,
-        jobUrl,
-      });
-    } else {
-      console.log("jobTitle, business, or jobUrl is null");
-    }
+    jobArray.push({
+      jobTitle,
+      business,
+      salary,
+      location,
+      jobUrl,
+    });
 
     //console.log the interval of jobs loaded
 
-    console.log((i + 1) + " job(s) loaded");
+    console.log(i + 1 + " job(s) loaded");
   }
   let j = 0;
   let k = ["🌕", "🛸", "☄️", "🌠", "🌎"];
@@ -150,7 +163,6 @@ const baseUrl = "https://www.jobbank.gc.ca";
     const newPage = await browser.newPage();
     await newPage.goto(jobArray[i].jobUrl);
     //optional deleting since the jobUrl is no longer needed
-    delete jobArray[i].jobUrl;
     //check if the #applynowbutton exists and then click on it
     const applyNowButton = await newPage.$("#applynowbutton");
     if (applyNowButton) {
@@ -256,40 +268,30 @@ const baseUrl = "https://www.jobbank.gc.ca";
     console.log("Database initialized");
     db.serialize(function () {
       db.run(
-        "CREATE TABLE IF NOT EXISTS jobs (jobTitle TEXT, business TEXT, howToApply TEXT)"
+        "CREATE TABLE IF NOT EXISTS jobs (jobTitle TEXT, business TEXT, salary TEXT, location TEXT, jobUrl TEXT, howToApply TEXT)"
       );
 
-      const stmt = db.prepare("INSERT INTO jobs VALUES (?, ?, ?)");
+      const stmt = db.prepare("INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?)");
       for (let i = 0; i < jobArray.length; i++) {
-        console.log(`Adding job ${i} to database`);
-        stmt.run(
-          jobArray[i].jobTitle,
-          jobArray[i].business,
-          jobArray[i].howToApply
-        );
-        console.log(`Job ${i} of ${jobArray.length} added to database 💽`);
+        if (jobArray[i]) {
+          console.log(`Adding job ${i} to database`);
+          stmt.run(
+            jobArray[i].jobTitle,
+            jobArray[i].business,
+            jobArray[i].salary,
+            jobArray[i].location,
+            jobArray[i].jobUrl,
+            jobArray[i].howToApply
+          );
+          console.log(`Job ${i} of ${jobArray.length} added to database 💽`);
+        }
       }
       stmt.finalize();
-      console.log("Database created 💽");
-      db.each(
-        "SELECT rowid AS id, jobTitle, business, howToApply FROM jobs",
-        function (err, row) {
-          console.log(
-            row.id +
-              ": " +
-              row.jobTitle +
-              " " +
-              row.business +
-              " " +
-              row.howToApply
-          );
-        }
-      );
     });
     db.close();
     //setTimeout to know when the database is closed
-
     console.log("Database saved 🤖");
+    await new Promise((resolve) => setTimeout(resolve, timeout + 1000 * 2));
   }
 
   //optional save the jobArray to a csv file
@@ -300,11 +302,14 @@ const baseUrl = "https://www.jobbank.gc.ca";
       header: [
         { id: "jobTitle", title: "Job Title" },
         { id: "business", title: "Business" },
+        { id: "salary", title: "Salary" },
+        { id: "location", title: "Location" },
+        { id: "jobUrl", title: "Job URL" },
         { id: "howToApply", title: "Email" },
       ],
     });
 
-    csvWriter.writeRecords(jobArray).then(() => console.log("Saved to CSV 📝"));
+    csvWriter.writeRecords(jobArray).then(() => console.log("Saved to CSV 📝")).catch((err) => console.log(err));
   }
 
   //close the browser and end the program

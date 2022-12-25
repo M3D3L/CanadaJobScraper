@@ -2,6 +2,11 @@
 
 <p>This code uses <a href="https://cheerio.js.org/">Cheerio</a> and <a href="https://pptr.dev/">Puppeteer</a> to scrape job listings from the <a href="https://www.jobbank.gc.ca">Government of Canada Job Bank</a> website. The user can specify the job title and province to search for, as well as the number of pages of results to scrape. The scraped data can be saved to a database, saved as a CSV file, and/or used to send emails to the listed employers.</p>
 
+<h2>Live Version</h2>
+
+<a href="https://63a8b7f930e20c0a8ee2e308--effortless-peony-c18854.netlify.app/" target="_blank">View Scraped Data</a>
+<p>Front end from the <a href="https://github.com/M3D3L/CanadaJobScraperFrontEnd" target="_blank">Canada Job Scraper FrontEnd</a> project</p>
+
 <h2>Requirements</h2>
 <ul>
   <li>Node.js</li>
