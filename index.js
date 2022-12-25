@@ -20,7 +20,7 @@ const password = "sepljgxtlmlsyeed";
 //****************Settings****************//
 const saveToDb = true;
 const saveToCSV = true;
-const sendEmails = false;
+const sendEmails = true;
 
 //email settings remove from html template if not in use and remove replace script below//
 const facebook = "https://www.facebook.com/profile.php?id=100083237295759";
