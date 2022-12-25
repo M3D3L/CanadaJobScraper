@@ -4,7 +4,7 @@
 
 <h2>Live Version</h2>
 
-<a href="https://63a8b7f930e20c0a8ee2e308--effortless-peony-c18854.netlify.app/" target="_blank">View Scraped Data</a>
+<a href="https://gregarious-marshmallow-f9324b.netlify.app/" target="_blank">View Scraped Data</a>
 <p>Front end from the <a href="https://github.com/M3D3L/CanadaJobScraperFrontEnd" target="_blank">Canada Job Scraper FrontEnd</a> project</p>
 
 <h2>Requirements</h2>
