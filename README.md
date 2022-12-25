@@ -46,6 +46,7 @@
 <ol>
   <li>Run the code with <code>npm run start</code></li>
   <li>The scraped data will be saved to a database and/or CSV file if specified, and emails will be sent if specified.</li>
+  <li>Converter.js file can be run after running your index.js if you saved the db. It converts the db to json.</li>
 </ol>
 
 <h2>Notes</h2>
