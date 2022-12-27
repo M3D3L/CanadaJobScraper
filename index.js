@@ -8,7 +8,7 @@ const timeout = Math.floor(Math.random() * 1000);
 const name = "Guillermo Medel";
 const phone = "+1 236-998-8668";
 //*****Number of pages you would like to scrape if not enough results it defaults to max pages***********//
-let numberOfPages = 100;
+let numberOfPages = 200;
 //search parameters job title and province
 const jobTitle = "";
 const province = "";
@@ -19,8 +19,8 @@ const password = "";
 
 //****************Settings****************//
 const saveToDb = true;
-const saveToCSV = true;
-const sendEmails = true;
+const saveToCSV = false;
+const sendEmails = false;
 
 //email settings remove from html template if not in use and remove replace script below//
 const facebook = "https://www.facebook.com/profile.php?id=100083237295759";

@@ -18,9 +18,7 @@ async function sqliteToJson(dbFile, selectSql) {
   }
   catch (err) {
     console.log(err);
-  }
-
-  
+  }  
 }
 
 // Call the function
