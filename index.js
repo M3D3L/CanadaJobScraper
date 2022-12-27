@@ -4,45 +4,67 @@ const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
 //controls timeouts to avoid being blocked by the website
 const timeout = Math.floor(Math.random() * 1000);
-//****************MODIFY THESE VALUES****************//
-const name = "Guillermo Medel";
-const phone = "+1 236-998-8668";
-//*****Number of pages you would like to scrape if not enough results it defaults to max pages***********//
-let numberOfPages = 200;
+
 //search parameters job title and province
-const jobTitle = "";
-const province = "";
-//*****Your email and password for emails***********//
-const email = "guillermoantoniomedel@gmail.com";
-//*****Get Google App Password here https://myaccount.google.com/apppasswords***********//
-const password = "";
+let jobTitle = "";
+let province = "";
+
+//*****Number of pages you would like to scrape if not enough results it defaults to max pages***********//
+let numberOfPages = 100;
 
 //****************Settings****************//
-const saveToDb = true;
-const saveToCSV = false;
-const sendEmails = false;
-
-//email settings remove from html template if not in use and remove replace script below//
-const facebook = "https://www.facebook.com/profile.php?id=100083237295759";
-const linkedin = "https://www.linkedin.com/in/guillermo-medel-9a4465151/";
-const twitter = "https://twitter.com/GmoMedel";
-const profilePic = "https://guillermomedel.com/email/me.jpg";
-const skills = ["Websites", "Scraping", "Shopify", "Apps", "SEO", "Emails"];
-const emailTitleLine1 = "Happy Holidays!";
-const emailTitleLine2 = "Add me to your roster for 2023!";
-
-//email body message
-const message =
-  "I'm a software developer who offers a range of services customized to meet the specific needs of your business. From creating a professional website to data scraping";
-//use the index.html file as a template for the email
-const fs = require("fs");
-const template = fs.readFileSync("./email.html", "utf8");
+let saveToDb = true;
+let saveToCSV = true;
+let sendEmails = true;
 
 //****************Do not modify****************//
 const baseUrl = "https://www.jobbank.gc.ca";
 
+//begin by requesting the job title and province from the user and then run the main function
+const readline = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+console.log("Welcome to 🇨🇦🍁 Job Bank Scraper by GuillermoMedel.com")
+readline.question("What job title are you looking for? Leave blank for all results ", (title) => {
+  jobTitle = title;
+  readline.question("What province are you looking for? Leave blank for all results ", (prov) => {
+    province = prov;
+    readline.question("How many pages? Default 100 ", (num) => {
+      if(num !== ""){
+        numberOfPages = num;
+      } else {
+        numberOfPages = 100;
+      }
+      readline.question("Save to DB y/n? Default true ", (db) => {
+        if(db === "y" || db === "yes" || db === ""){
+          saveToDb = true;
+        } else {
+          saveToDb = false;
+        }
+        readline.question("Save to CSV y/n? Default true ", (csv) => {
+          if(csv === "y" || csv === "yes" || csv === ""){
+            saveToCSV = true;
+          } else {
+            saveToCSV = false;
+          }
+          readline.question("Send emails y/n? Enter data in .env file ", (email) => {
+            if(email === "y" || email === "yes" || email === ""){
+              sendEmails = true;
+            } else {
+              sendEmails = false;
+            }
+            readline.close();
+            main();
+          });
+        });
+      });
+    });
+  });
+})
+
 //****************Main****************//
-(async () => {
+const main = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
@@ -191,6 +213,26 @@ const baseUrl = "https://www.jobbank.gc.ca";
 
   //send emails to the howToApply addresses using nodemailer
   if (sendEmails) {
+    //get the values from the .env file
+    const email = process.env.EMAIL;
+    const password = process.env.PASSWORD;
+    const name = process.env.NAME;
+    const phone = process.env.PHONE;
+    const facebook = process.env.FACEBOOK;
+    const linkedin = process.env.LINKEDIN;
+    const twitter = process.env.TWITTER;
+    const profilePic = process.env.PROFILE_PIC;
+    const skills = ["Websites", "Scraping", "Shopify", "Apps", "SEO", "Emails"];
+    const emailTitleLine1 = "Happy Holidays!";
+    const emailTitleLine2 = "Add me to your roster for 2023!";
+
+    //email body message
+    const message =
+      "I'm a software developer who offers a range of services customized to meet the specific needs of your business. From creating a professional website to data scraping";
+    //use the index.html file as a template for the email
+    const fs = require("fs");
+    const template = fs.readFileSync("./email.html", "utf8");
+
     const nodemailer = require("nodemailer");
     console.log("Nodemailer initialized 🏃‍♂️");
     //setTimeout to know when the emails are begining to be sent
@@ -238,7 +280,7 @@ const baseUrl = "https://www.jobbank.gc.ca";
 
       const mailOptions = {
         from: `${name}`,
-        to: `${jobArray[i].howToApply}`,
+        to: `${email}`,
         subject:
           "" +
           jobArray[i].jobTitle +
@@ -296,24 +338,48 @@ const baseUrl = "https://www.jobbank.gc.ca";
 
   //optional save the jobArray to a csv file
   if (saveToCSV) {
-    const createCsvWriter = require("csv-writer").createObjectCsvWriter;
-    const csvWriter = createCsvWriter({
-      path: "jobs.csv",
-      header: [
-        { id: "jobTitle", title: "Job Title" },
-        { id: "business", title: "Business" },
-        { id: "salary", title: "Salary" },
-        { id: "location", title: "Location" },
-        { id: "jobUrl", title: "Job URL" },
-        { id: "howToApply", title: "Email" },
-      ],
+    let csv = "jobTitle, business, salary, location, jobUrl, howToApply \n";
+    for (let i = 0; i < jobArray.length; i++) {
+      if (jobArray[i]) {
+        csv +=
+          jobArray[i].jobTitle +
+          "," +
+          jobArray[i].business +
+          "," +
+          jobArray[i].salary +
+          "," +
+          jobArray[i].location +
+          "," +
+          jobArray[i].jobUrl +
+          "," +
+          jobArray[i].howToApply +
+          "\n";
+      }
+    }
+    const fs = require("fs");
+    fs.writeFile("jobs.csv", csv, function (err) {
+      if (err) {
+        return console.log(err);
+      }
+      console.log("jobs.csv saved 📄");
     });
 
-    csvWriter.writeRecords(jobArray).then(() => console.log("Saved to CSV 📝")).catch((err) => console.log(err));
+    //setTimeout to know when the csv file is saved
+    await new Promise((resolve) => setTimeout(resolve, timeout + 1000 * 2));
+
+    //close the browser and end the program
+    await browser.close();
+    console.log(
+      "Thank you for using CanadaJobScraper by GuillermoMedel.com ☕"
+    );
+    console.log("Browser closed 👋");
+
+    //exit the program
+    process.exit();
   }
 
   //close the browser and end the program
   await browser.close();
   console.log("Thank you for using CanadaJobScraper by GuillermoMedel.com ☕");
   console.log("Browser closed 👋");
-})();
+};
