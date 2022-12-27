@@ -15,7 +15,7 @@ const province = "";
 //*****Your email and password for emails***********//
 const email = "guillermoantoniomedel@gmail.com";
 //*****Get Google App Password here https://myaccount.google.com/apppasswords***********//
-const password = "sepljgxtlmlsyeed";
+const password = "";
 
 //****************Settings****************//
 const saveToDb = true;
