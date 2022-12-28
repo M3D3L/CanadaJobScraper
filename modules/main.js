@@ -32,7 +32,8 @@ export const main = async (
 
   //clicks on the more results button to load more results
   await numPages(page, numberOfPages, timeout);
-
+  
+  let jobArray = [];
   await runScraper(jobArray, page, baseUrl, browser);
 
   //send emails to the howToApply addresses using nodemailer

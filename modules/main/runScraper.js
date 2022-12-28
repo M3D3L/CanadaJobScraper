@@ -14,23 +14,11 @@ export const runScraper = async (jobArray, page, baseUrl, browser) => {
   pushToArray(jobArray, jobList, $, baseUrl);
 
   //variables to toggle the emoji animation in the console
-  let j = 0;
-  let k = 0;
 
   for (let i = 0; i < jobArray.length; i++) {
     // use the spaceship function to toggle the emoji animation in the console
-    await spaceship(jobArray, i, j, k);
+    await spaceship(jobArray.length, i);
 
-    if (j < 4) {
-      j++;
-    } else {
-      j = 0;
-      if (k < 4) {
-        k++;
-      } else {
-        k = 0;
-      }
-    }
     //begin the loop to open each job and scrape the email address aka howToApply
     await scrapeNewPage(jobArray, i, browser, cheerio);
   }
