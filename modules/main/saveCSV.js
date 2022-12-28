@@ -20,6 +20,7 @@ export const saveCSV = async (jobArray, timeout) => {
     }
   }
 
+  //write the csv file to the root folder
   fs.writeFile("jobs.csv", csv, function (err) {
     if (err) {
       return console.log(err);

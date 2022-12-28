@@ -1,6 +1,7 @@
 import sqlite3 from "sqlite3";
 
 export const saveDB = async (jobArray, timeout) => {
+  
   const db = new sqlite3.Database("jobs.db");
 
   console.log("Database initialized");
@@ -8,7 +9,8 @@ export const saveDB = async (jobArray, timeout) => {
     db.run(
       "CREATE TABLE IF NOT EXISTS jobs (jobTitle TEXT, business TEXT, salary TEXT, location TEXT, jobUrl TEXT, email TEXT)"
     );
-
+    
+    //inserts the jobArray into the database
     const stmt = db.prepare("INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?)");
     for (let i = 0; i < jobArray.length; i++) {
       if (jobArray[i]) {

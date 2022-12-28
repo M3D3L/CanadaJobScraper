@@ -25,6 +25,7 @@ export const main = async (
 
   await page.goto(baseUrl);
   page.waitForNavigation();
+  //waits for the search bar to load
   await page.waitForSelector("#searchString");
 
   //adds the job title and province to the search bar and clicks on the search button

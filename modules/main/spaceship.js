@@ -3,7 +3,6 @@ let j = 0;
 
 export const spaceship = async (jobArray, i) => {
   const l = ["🌕", "🛸", "☄️", "🌠", "🌎"];
-  //console.log and toggle betwtween three dots to show progress
   if (j === 0) {
     console.log("Loading job " + i + " of " + jobArray + "🚀");
   } else if (j === 1) {

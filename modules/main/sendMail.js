@@ -24,7 +24,7 @@ export const sendMail = async (jobArray, timeout) => {
   //email body message
   const message =
     "I'm a software developer who offers a range of services customized to meet the specific needs of your business. From creating a professional website to data scraping";
-  //use the index.html file as a template for the email
+  //use the email.html file as a template for the email
   const template = fs.readFileSync("./email.html", "utf8");
 
   console.log("Nodemailer initialized 🏃‍♂️");
@@ -33,6 +33,7 @@ export const sendMail = async (jobArray, timeout) => {
     console.log("Sending emails 📧");
   }, timeout * 2 + 1000);
   const transporter = nodemailer.createTransport({
+    //login to your email account
     service: "gmail",
     auth: {
       user: `${email}`,
