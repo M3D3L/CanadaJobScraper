@@ -1,7 +1,7 @@
 import fs from "fs";
 
 export const saveCSV = async (jobArray, timeout) => {
-  let csv = "jobTitle, business, salary, location, jobUrl, howToApply \n";
+  let csv = "jobTitle, business, salary, location, jobUrl, email \n";
   for (let i = 0; i < jobArray.length; i++) {
     if (jobArray[i]) {
       csv +=
@@ -15,7 +15,7 @@ export const saveCSV = async (jobArray, timeout) => {
         "," +
         jobArray[i].jobUrl +
         "," +
-        jobArray[i].howToApply +
+        jobArray[i].email +
         "\n";
     }
   }

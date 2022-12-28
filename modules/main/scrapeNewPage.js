@@ -14,15 +14,15 @@ export const scrapeNewPage = async (jobArray, i, browser, cheerio) => {
     const $$ = cheerio.load(newHtml);
 
     await newPage.waitForSelector("#howtoapply");
-    const howToApply = $$("#howtoapply > p > a").text();
-    if (howToApply) {
-      //add the howToApply to the job object
-      jobArray[i].howToApply = howToApply;
-      console.log("Scraped email " + howToApply);
+    const email = $$("#howtoapply > p > a").text();
+    if (email) {
+      //add the email to the job object
+      jobArray[i].email = email;
+      console.log("Scraped email " + email);
     } else {
-      //delete the job object if there is no howToApply and continue the loop
+      //delete the job object if there is no email and continue the loop
       delete jobArray[i];
-      console.log("howToApply is null");
+      console.log("email is null");
     }
     //close the new page
     await newPage.close();

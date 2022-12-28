@@ -36,7 +36,7 @@ export const main = async (
   let jobArray = [];
   await runScraper(jobArray, page, baseUrl, browser);
 
-  //send emails to the howToApply addresses using nodemailer
+  //send emails using nodemailer
   if (sendEmails) {
     await sendMail(jobArray, timeout);
   }

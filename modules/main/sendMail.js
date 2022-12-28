@@ -44,7 +44,7 @@ export const sendMail = async (jobArray, timeout) => {
     //set timeout to avoid spamming the email server
     await new Promise((resolve) => setTimeout(resolve, timeout * 2 + 1000));
     console.log(
-      `Sending 📧 ${i} of ${jobArray.length} to ${jobArray[i].howToApply}`
+      `Sending 📧 ${i} of ${jobArray.length} to ${jobArray[i].email}`
     );
 
     //replace the placeholders in the email.html file with the job information
@@ -73,7 +73,7 @@ export const sendMail = async (jobArray, timeout) => {
 
     const mailOptions = {
       from: `${name}`,
-      to: `${jobArray[i].howToApply}`,
+      to: `${jobArray[i].email}`,
       subject:
         "" +
         jobArray[i].jobTitle +
@@ -90,7 +90,7 @@ export const sendMail = async (jobArray, timeout) => {
         console.log("Email sent: " + info.response);
       }
     });
-    console.log("Email sent to " + jobArray[i].howToApply + "✔️");
+    console.log("Email sent to " + jobArray[i].email + "✔️");
   }
   console.log("Emails sent to " + jobArray.length + " people 😺");
 };
