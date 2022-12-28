@@ -25,6 +25,7 @@
       <li><code>province</code>: The province to search in (leave empty to search in all provinces)</li>
       <li><code>email</code>: Your email address</li>
       <li><code>password</code>: Your Google App Password (obtain one <a href="https://myaccount.google.com/apppasswords">here</a>)</li>
+      <li><code>.env</code>: create a .env file if one does not exist with your email settings in the sendMail.js file</li>
     </ul>
   </li>
   <li>(Optional) Modify the following values in the code to customize the email template:
@@ -55,6 +56,6 @@
   <li>Email template from <a href="https://unlayer.com/templates">https://unlayer.com/</a></li>
   <li>The code uses the <code>template</code> variable as an HTML template for the emails. You can use the provided <code>email.html</code> file as a starting point, or create your own template.</li>
   <li>The code uses the <a href="https://nodemailer.com/about/">Nodemailer</a> package to send emails through Google's SMTP server. You will need to provide your email address and a <a href="https://myaccount.google.com/apppasswords">Google App Password</a> in order to send emails.</li>
-  <li>The code uses the <a href="https://www.npmjs.com/package/csv-parser">csv-parser</a> package to parse CSV data, and the <a href="https://www.npmjs.com/package/csv-writer">csv-writer</a> package to write CSV data.
+  <li>The code uses the <a href="https://www.npmjs.com/package/dotenv">dotenv</a> package to allow us to save our email data in a .env file 
   </li>
 </ul>
