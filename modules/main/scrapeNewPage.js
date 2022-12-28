@@ -1,6 +1,4 @@
-import cheerio from 'cheerio';
-
-export const scrapeNewPage = async (jobArray, i, browser) => {
+export const scrapeNewPage = async (jobArray, i, browser, cheerio) => {
     //open a new page and go to the jobUrl
     const newPage = await browser.newPage();
     await newPage.goto(jobArray[i].jobUrl);

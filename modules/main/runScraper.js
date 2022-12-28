@@ -34,6 +34,6 @@ export const runScraper = async (
       }
     }
     //begin the loop to open each job and scrape the email address aka howToApply
-    await scrapeNewPage(jobArray, i, browser);
+    await scrapeNewPage(jobArray, i, browser, cheerio);
   }
 };
