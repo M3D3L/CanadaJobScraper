@@ -1,3 +1,5 @@
+//running this file will convert the sqlite database to json
+
 async function sqliteToJson(dbFile, selectSql) {
   // Load the sqlite3 module
   const sqlite3 = require('sqlite3').verbose();
