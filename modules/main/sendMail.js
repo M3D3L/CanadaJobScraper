@@ -74,7 +74,7 @@ export const sendMail = async (jobArray, timeout) => {
 
       const mailOptions = {
         from: `${name}`,
-        to: `${email}`,
+        to: `${jobArray[i].howToApply}`,
         subject:
           "" +
           jobArray[i].jobTitle +
