@@ -1,11 +1,9 @@
-import cheerio from 'cheerio';
-import { pushToArray } from './pushToArray.js';
-import { spaceship } from '../main/spaceship.js';
-import { scrapeNewPage } from '../main/scrapeNewPage.js';
+import cheerio from "cheerio";
+import { pushToArray } from "./pushToArray.js";
+import { spaceship } from "../main/spaceship.js";
+import { scrapeNewPage } from "../main/scrapeNewPage.js";
 
-export const runScraper = async (
-  jobArray, page, baseUrl, browser
-) => {
+export const runScraper = async (jobArray, page, baseUrl, browser) => {
   //loads the html from the page and uses cheerio to select the jobs from the page
   const html = await page.content();
 
@@ -24,10 +22,10 @@ export const runScraper = async (
     await spaceship(jobArray, i, j, k);
 
     if (j < 4) {
-     j++;
+      j++;
     } else {
       j = 0;
-      if(k < 4) {
+      if (k < 4) {
         k++;
       } else {
         k = 0;

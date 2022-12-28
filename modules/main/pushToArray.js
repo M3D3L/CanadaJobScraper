@@ -1,5 +1,5 @@
 export const pushToArray = (jobArray, jobList, $, baseUrl) => {
-    //loop through the jobList and add scrape the data to the jobArray
+  //loop through the jobList and add scrape the data to the jobArray
   for (let i = 0; i < jobList.length; i++) {
     const jobTitle = $(jobList[i]).find(".noctitle").text().split("\n")[0];
     const list = $(jobList[i]).find(".list-unstyled");
@@ -34,4 +34,4 @@ export const pushToArray = (jobArray, jobList, $, baseUrl) => {
 
     console.log(i + 1 + " job(s) loaded");
   }
-}
+};

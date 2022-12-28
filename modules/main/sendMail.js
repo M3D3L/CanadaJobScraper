@@ -2,96 +2,95 @@ import nodemailer from "nodemailer";
 import fs from "fs";
 import * as dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 export const sendMail = async (jobArray, timeout) => {
-  
-    //get the values from the .env file
-    const email = process.env.EMAIL;
-    const password = process.env.PASSWORD;
-    const name = process.env.NAME;
-    const phone = process.env.PHONE;
-    const facebook = process.env.FACEBOOK;
-    const linkedin = process.env.LINKEDIN;
-    const twitter = process.env.TWITTER;
-    const profilePic = process.env.PROFILE_PIC;
-    const skills = ["Websites", "Scraping", "Shopify", "Apps", "SEO", "Emails"];
-    const emailTitleLine1 = "Happy Holidays!";
-    const emailTitleLine2 = "Add me to your roster for 2023!";
+  //get the values from the .env file
+  const email = process.env.EMAIL;
+  const password = process.env.PASSWORD;
+  const name = process.env.NAME;
+  const phone = process.env.PHONE;
+  const facebook = process.env.FACEBOOK;
+  const linkedin = process.env.LINKEDIN;
+  const twitter = process.env.TWITTER;
+  const profilePic = process.env.PROFILE_PIC;
+  const skills = ["Websites", "Scraping", "Shopify", "Apps", "SEO", "Emails"];
+  const emailTitleLine1 = "Happy Holidays!";
+  const emailTitleLine2 = "Add me to your roster for 2023!";
 
-    //await timeout to avoid spamming the email server
+  //await timeout to avoid spamming the email server
+  await new Promise((resolve) => setTimeout(resolve, timeout * 2 + 1000));
+
+  //email body message
+  const message =
+    "I'm a software developer who offers a range of services customized to meet the specific needs of your business. From creating a professional website to data scraping";
+  //use the index.html file as a template for the email
+  const template = fs.readFileSync("./email.html", "utf8");
+
+  console.log("Nodemailer initialized 🏃‍♂️");
+  //setTimeout to know when the emails are begining to be sent
+  setTimeout(() => {
+    console.log("Sending emails 📧");
+  }, timeout * 2 + 1000);
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: `${email}`,
+      pass: `${password}`,
+    },
+  });
+
+  for (let i = 0; i < jobArray.length; i++) {
+    //set timeout to avoid spamming the email server
     await new Promise((resolve) => setTimeout(resolve, timeout * 2 + 1000));
+    console.log(
+      `Sending 📧 ${i} of ${jobArray.length} to ${jobArray[i].howToApply}`
+    );
 
-    //email body message
-    const message =
-      "I'm a software developer who offers a range of services customized to meet the specific needs of your business. From creating a professional website to data scraping";
-    //use the index.html file as a template for the email
-    const template = fs.readFileSync("./email.html", "utf8");
+    //replace the placeholders in the email.html file with the job information
+    const updatedTemplate = template
+      .replace("{{emailTitleLine1}}", emailTitleLine1)
+      .replace("{{emailTitleLine2}}", emailTitleLine2)
+      .replace("{{name}}", name)
+      .replace("{{name2}}", name)
+      .replace("{{phone}}", phone)
+      .replace("{{email}}", email)
+      .replace("{{jobTitle}}", jobArray[i].jobTitle)
+      .replace("{{business}}", jobArray[i].business)
+      .replace("{{business2}}", jobArray[i].business)
+      .replace("{{business3}}", jobArray[i].business)
+      .replace("{{message}}", message)
+      .replace("{{facebook}}", facebook)
+      .replace("{{linkedin}}", linkedin)
+      .replace("{{twitter}}", twitter)
+      .replace("{{profilePic}}", profilePic)
+      .replace("{{skills1}}", skills[0])
+      .replace("{{skills2}}", skills[1])
+      .replace("{{skills3}}", skills[2])
+      .replace("{{skills4}}", skills[3])
+      .replace("{{skills5}}", skills[4])
+      .replace("{{skills6}}", skills[5]);
 
-    console.log("Nodemailer initialized 🏃‍♂️");
-    //setTimeout to know when the emails are begining to be sent
-    setTimeout(() => {
-      console.log("Sending emails 📧");
-    }, timeout * 2 + 1000);
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: `${email}`,
-        pass: `${password}`,
-      },
+    const mailOptions = {
+      from: `${name}`,
+      to: `${jobArray[i].howToApply}`,
+      subject:
+        "" +
+        jobArray[i].jobTitle +
+        " job position at " +
+        jobArray[i].business +
+        "",
+      //use the index.html file as the email body and replace the placeholders with the job information
+      html: updatedTemplate,
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
     });
-
-    for (let i = 0; i < jobArray.length; i++) {
-      //set timeout to avoid spamming the email server
-      await new Promise((resolve) => setTimeout(resolve, timeout * 2 + 1000));
-      console.log(
-        `Sending 📧 ${i} of ${jobArray.length} to ${jobArray[i].howToApply}`
-      );
-
-      //replace the placeholders in the email.html file with the job information
-      const updatedTemplate = template
-        .replace("{{emailTitleLine1}}", emailTitleLine1)
-        .replace("{{emailTitleLine2}}", emailTitleLine2)
-        .replace("{{name}}", name)
-        .replace("{{name2}}", name)
-        .replace("{{phone}}", phone)
-        .replace("{{email}}", email)
-        .replace("{{jobTitle}}", jobArray[i].jobTitle)
-        .replace("{{business}}", jobArray[i].business)
-        .replace("{{business2}}", jobArray[i].business)
-        .replace("{{business3}}", jobArray[i].business)
-        .replace("{{message}}", message)
-        .replace("{{facebook}}", facebook)
-        .replace("{{linkedin}}", linkedin)
-        .replace("{{twitter}}", twitter)
-        .replace("{{profilePic}}", profilePic)
-        .replace("{{skills1}}", skills[0])
-        .replace("{{skills2}}", skills[1])
-        .replace("{{skills3}}", skills[2])
-        .replace("{{skills4}}", skills[3])
-        .replace("{{skills5}}", skills[4])
-        .replace("{{skills6}}", skills[5]);
-
-      const mailOptions = {
-        from: `${name}`,
-        to: `${jobArray[i].howToApply}`,
-        subject:
-          "" +
-          jobArray[i].jobTitle +
-          " job position at " +
-          jobArray[i].business +
-          "",
-        //use the index.html file as the email body and replace the placeholders with the job information
-        html: updatedTemplate,
-      };
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
-      console.log("Email sent to " + jobArray[i].howToApply + "✔️");
-    }
-    console.log("Emails sent to " + jobArray.length + " people 😺");
-}
+    console.log("Email sent to " + jobArray[i].howToApply + "✔️");
+  }
+  console.log("Emails sent to " + jobArray.length + " people 😺");
+};

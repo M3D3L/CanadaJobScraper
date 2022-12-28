@@ -3,7 +3,9 @@ export const displayMessage = async (jobTitle, province, timeout, page) => {
     await page.type("#searchString", jobTitle);
     if (province !== "") {
       await page.type("#locationstring", province);
-      console.log("Searching for " + jobTitle + " in " + province + " 🇨🇦🍁🦫🏒");
+      console.log(
+        "Searching for " + jobTitle + " jobs in " + province + " 🇨🇦🍁🦫🏒"
+      );
     } else {
       console.log(
         "Searching for " + jobTitle + " jobs in all of Canada 🇨🇦🍁🦫🏒"

@@ -1,9 +1,9 @@
-import { main } from './modules/main.js';
-import * as readline from 'readline';
+import { main } from "./modules/main.js";
+import * as readline from "readline";
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 //search parameters job title and province
@@ -18,41 +18,57 @@ let saveToDb = true;
 let saveToCSV = true;
 let sendEmails = true;
 
-console.log("Welcome to 🇨🇦🍁 Job Bank Scraper by GuillermoMedel.com")
-rl.question("What job title are you looking for? Leave blank for all results ", (title) => {
-  jobTitle = title;
-  rl.question("What province are you looking for? Leave blank for all results ", (prov) => {
-    province = prov;
-    rl.question("How many pages? Default 20 ", (num) => {
-      if(num !== ""){
-        numberOfPages = num;
-      } else {
-        numberOfPages = 20;
-      }
-      rl.question("Save to DB y/n? Default true ", (db) => {
-        if(db === "y" || db === "yes" || db === ""){
-          saveToDb = true;
-        } else {
-          saveToDb = false;
-        }
-        rl.question("Save to CSV y/n? Default true ", (csv) => {
-          if(csv === "y" || csv === "yes" || csv === ""){
-            saveToCSV = true;
+console.log("Welcome to 🇨🇦🍁 Job Bank Scraper by GuillermoMedel.com");
+rl.question(
+  "What job title are you looking for? Leave blank for all results ",
+  (title) => {
+    jobTitle = title;
+    rl.question(
+      "What province are you looking for? Leave blank for all results ",
+      (prov) => {
+        province = prov;
+        rl.question("How many pages? Default 20 ", (num) => {
+          if (num !== "") {
+            numberOfPages = num;
           } else {
-            saveToCSV = false;
+            numberOfPages = 20;
           }
-          rl.question("Send emails y/n? Enter data in .env file ", (email) => {
-            if(email === "y" || email === "yes" || email === ""){
-              sendEmails = true;
+          rl.question("Save to DB y/n? Default true ", (db) => {
+            if (db === "y" || db === "yes" || db === "") {
+              saveToDb = true;
             } else {
-              sendEmails = false;
+              saveToDb = false;
             }
-            rl.close();
-            //runs the scraper after all the questions are answered
-            main(jobTitle, province, numberOfPages, saveToDb, saveToCSV, sendEmails);
+            rl.question("Save to CSV y/n? Default true ", (csv) => {
+              if (csv === "y" || csv === "yes" || csv === "") {
+                saveToCSV = true;
+              } else {
+                saveToCSV = false;
+              }
+              rl.question(
+                "Send emails y/n? Enter data in .env file ",
+                (email) => {
+                  if (email === "y" || email === "yes" || email === "") {
+                    sendEmails = true;
+                  } else {
+                    sendEmails = false;
+                  }
+                  rl.close();
+                  //runs the scraper after all the questions are answered
+                  main(
+                    jobTitle,
+                    province,
+                    numberOfPages,
+                    saveToDb,
+                    saveToCSV,
+                    sendEmails
+                  );
+                }
+              );
+            });
           });
         });
-      });
-    });
-  });
-})
+      }
+    );
+  }
+);
