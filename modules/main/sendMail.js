@@ -18,9 +18,6 @@ export const sendMail = async (jobArray, timeout) => {
   const emailTitleLine1 = "Happy Holidays!";
   const emailTitleLine2 = "Add me to your roster for 2023!";
 
-  //await timeout to avoid spamming the email server
-  await new Promise((resolve) => setTimeout(resolve, timeout * 2 + 1000));
-
   //email body message
   const message =
     "I'm a software developer who offers a range of services customized to meet the specific needs of your business. From creating a professional website to data scraping";

@@ -1,9 +1,15 @@
 import fs from "fs";
 
 export const saveCSV = async (jobArray, timeout) => {
-  let csv = "jobTitle, business, salary, location, jobUrl, email \n";
+  let csv = "jobTitle, business, salary, location, jobUrl, email, date \n";
   for (let i = 0; i < jobArray.length; i++) {
-    if (jobArray[i].email !== null && jobArray[i].email !== undefined && jobArray[i].email.includes("@") && !jobArray[i].email.includes("www.") && !jobArray[i].email.includes("http")) {
+    if (
+      jobArray[i].email !== null &&
+      jobArray[i].email !== undefined &&
+      jobArray[i].email.includes("@") &&
+      !jobArray[i].email.includes("www.") &&
+      !jobArray[i].email.includes("http")
+    ) {
       csv +=
         jobArray[i].jobTitle +
         "," +
@@ -16,9 +22,15 @@ export const saveCSV = async (jobArray, timeout) => {
         jobArray[i].jobUrl +
         "," +
         jobArray[i].email +
+        "," +
+        jobArray[i].date +
         "\n";
     } else {
       console.log(`Job ${i + 1} is invalid and was skipped 🤖`);
+      //delete the job from the jobArray
+      jobArray.splice(i, 1);
+      //decrement the index to avoid skipping a jobs
+      i--;
     }
   }
 

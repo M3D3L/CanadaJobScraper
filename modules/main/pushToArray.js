@@ -20,6 +20,14 @@ export const pushToArray = (jobArray, jobList, $, baseUrl) => {
       .filter((item) => item !== "")
       .join(", ");
 
+    const date = list
+      .find(".date")
+      .text()
+      .split("\n, span")
+      .filter((item) => item !== "")
+      .join(", ");
+
+
     const jobUrl = baseUrl + $(jobList[i]).find("a").attr("href");
 
     jobArray.push({
@@ -28,6 +36,7 @@ export const pushToArray = (jobArray, jobList, $, baseUrl) => {
       salary,
       location,
       jobUrl,
+      date,
     });
 
     //console.log the interval of jobs loaded

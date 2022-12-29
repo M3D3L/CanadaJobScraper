@@ -7,11 +7,11 @@ export const saveDB = async (jobArray, timeout) => {
   console.log("Database initialized");
   db.serialize(function () {
     db.run(
-      "CREATE TABLE IF NOT EXISTS jobs (jobTitle TEXT, business TEXT, salary TEXT, location TEXT, jobUrl TEXT, email TEXT)"
+      "CREATE TABLE IF NOT EXISTS jobs (jobTitle TEXT, business TEXT, salary TEXT, location TEXT, jobUrl TEXT, email TEXT, date TEXT)"
     );
     
     //inserts the jobArray into the database
-    const stmt = db.prepare("INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?)");
+    const stmt = db.prepare("INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?, ?)");
     for (let i = 0; i < jobArray.length; i++) {
       if (jobArray[i].email !== null && jobArray[i].email !== undefined && jobArray[i].email.includes("@") && !jobArray[i].email.includes("www.") && !jobArray[i].email.includes("http")) {
         stmt.run(
@@ -20,7 +20,8 @@ export const saveDB = async (jobArray, timeout) => {
           jobArray[i].salary,
           jobArray[i].location,
           jobArray[i].jobUrl,
-          jobArray[i].email
+          jobArray[i].email,
+          jobArray[i].date
         );
         console.log(`Job ${i + 1} of ${jobArray.length} added to database 💽`);
       } else {
