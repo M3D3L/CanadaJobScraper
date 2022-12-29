@@ -29,6 +29,7 @@ export const saveDB = async (jobArray, timeout) => {
     stmt.finalize();
   });
   db.close();
+  
   //setTimeout to know when the database is closed
   console.log("Database saved 🤖");
   await new Promise((resolve) => setTimeout(resolve, timeout + 1000 * 2));
