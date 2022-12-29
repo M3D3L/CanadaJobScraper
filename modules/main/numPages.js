@@ -8,7 +8,7 @@ export const numPages = async (page, numberOfPages, timeout) => {
     const moreButton = await page.$("#moreresultbutton");
     if (moreButton) {
       await moreButton.evaluate((b) => b.click());
-      console.log(i + " 📄(s) loaded out of " + numberOfPages);
+      console.log( (i + 1) + " 📄(s) loaded out of " + numberOfPages);
       await page.waitForTimeout(timeout);
     } else {
       console.log(`No more results after ${i--} pages 😔`);

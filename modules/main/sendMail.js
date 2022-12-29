@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export const sendMail = async (jobArray, timeout) => {
-  //get the values from the .env file
+  //create a .env file and add the following variables
   const email = process.env.EMAIL;
   const password = process.env.PASSWORD;
   const name = process.env.NAME;
@@ -27,7 +27,7 @@ export const sendMail = async (jobArray, timeout) => {
   //use the email.html file as a template for the email
   const template = fs.readFileSync("./email.html", "utf8");
 
-  console.log("Nodemailer initialized 🏃‍♂️");
+  console.log("Nodemailer initialized 📧");
   //setTimeout to know when the emails are begining to be sent
   setTimeout(() => {
     console.log("Sending emails 📧");
@@ -94,7 +94,7 @@ export const sendMail = async (jobArray, timeout) => {
           console.log(error);
         } else {
           console.log(
-            `Sent 📧 ${i} of ${jobArray.length} to ${jobArray[i].email}`
+            `Sent 📧 ${i + 1} of ${jobArray.length} to ${jobArray[i].email}`
           );   
         }
       });

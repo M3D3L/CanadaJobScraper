@@ -13,8 +13,7 @@ export const saveDB = async (jobArray, timeout) => {
     //inserts the jobArray into the database
     const stmt = db.prepare("INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?)");
     for (let i = 0; i < jobArray.length; i++) {
-      if (jobArray[i]) {
-        console.log(`Adding job ${i} to database`);
+      if (jobArray[i].email !== null && jobArray[i].email !== undefined && jobArray[i].email.includes("@") && !jobArray[i].email.includes("www.") && !jobArray[i].email.includes("http")) {
         stmt.run(
           jobArray[i].jobTitle,
           jobArray[i].business,
@@ -23,7 +22,9 @@ export const saveDB = async (jobArray, timeout) => {
           jobArray[i].jobUrl,
           jobArray[i].email
         );
-        console.log(`Job ${i} of ${jobArray.length} added to database 💽`);
+        console.log(`Job ${i + 1} of ${jobArray.length} added to database 💽`);
+      } else {
+        console.log(`Job ${i + 1} is invalid and was skipped 🤖`);
       }
     }
     stmt.finalize();

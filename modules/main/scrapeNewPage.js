@@ -27,11 +27,11 @@ export const scrapeNewPage = async (jobArray, i, browser, cheerio) => {
   ) {
     console.log("Scraped email " + email);
   } else {
+    //delete the job from the jobArray
     jobArray.splice(i, 1);
 
-      //decrement the index to avoid skipping a job
-      i--;
-      //continue to the next iteration of the loop
+    //decrement the index to avoid skipping a job
+    i--;
     console.log("email is null or invalid and was deleted");
   }
 
