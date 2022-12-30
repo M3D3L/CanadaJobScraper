@@ -17,6 +17,7 @@ let numberOfPages = 20;
 let saveToDb = true;
 let saveToCSV = true;
 let sendEmails = true;
+let filterEmail = true;
 
 console.log("Welcome to 🇨🇦🍁 Job Bank Scraper by GuillermoMedel.com");
 rl.question(
@@ -46,22 +47,33 @@ rl.question(
                 saveToCSV = false;
               }
               rl.question(
-                "Send emails y/n? Enter data in .env file ",
+                "Filter out duplicate emails y/n? Default true ",
                 (email) => {
                   if (email === "y" || email === "yes" || email === "") {
-                    sendEmails = true;
+                    filterEmail = true;
                   } else {
-                    sendEmails = false;
+                    filterEmail = false;
                   }
-                  rl.close();
-                  //runs the scraper after all the questions are answered
-                  main(
-                    jobTitle,
-                    province,
-                    numberOfPages,
-                    saveToDb,
-                    saveToCSV,
-                    sendEmails
+                  rl.question(
+                    "Send emails y/n? Enter data in .env file ",
+                    (email) => {
+                      if (email === "y" || email === "yes" || email === "") {
+                        sendEmails = true;
+                      } else {
+                        sendEmails = false;
+                      }
+                      rl.close();
+                      //runs the scraper after all the questions are answered
+                      main(
+                        jobTitle,
+                        province,
+                        numberOfPages,
+                        saveToDb,
+                        saveToCSV,
+                        sendEmails,
+                        filterEmail
+                      );
+                    }
                   );
                 }
               );

@@ -1,23 +1,23 @@
 let k = 0;
 let j = 0;
 
-export const spaceship = async (jobArray, i) => {
-  const l = ["🌕", "🛸", "☄️", "🌠", "🌎"];
+export const spaceship = async (arrayLength, i) => {
+  const l = ["🌎", "🌍", "🌏", "🌑", "🌒", "🌓", "🌔", "🌕", "🛸", "☄️", "🌠", "🌌", "🌟", "🌙", "🌚", "🌛", "🌜", "🌞", "🌝"];
   if (j === 0) {
-    console.log("Loading job " + (i + 1) + " of " + jobArray + "🚀");
+    console.log("Loading job " + (i + 1) + " of " + arrayLength + "🚀");
   } else if (j === 1) {
-    console.log("Loading job " + (i + 1) + " of " + jobArray + "🔥🚀");
+    console.log("Loading job " + (i + 1) + " of " + arrayLength + "🔥🚀");
   } else if (j === 2) {
-    console.log("Loading job " + (i + 1) + " of " + jobArray + "🔥🔥🚀");
+    console.log("Loading job " + (i + 1) + " of " + arrayLength + "🔥🔥🚀");
     //fire emoji
   } else if (j === 3) {
-    console.log("Loading job " + (i + 1) + " of " + jobArray + "🔥🔥🔥🚀");
+    console.log("Loading job " + (i + 1) + " of " + arrayLength + "🔥🔥🔥🚀");
   } else {
     console.log(
-      "Loading job " + (i + 1) + " of " + jobArray + "🔥🔥🔥🔥🚀" + `${l[k]}`
+      "Loading job " + (i + 1) + " of " + arrayLength + "🔥🔥🔥🔥🚀" + `${l[k]}`
     );
   }
-  if (j < l.length - 1) {
+  if (j < 4) {
     j++;
   } else {
     j = 0;

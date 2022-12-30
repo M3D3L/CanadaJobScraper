@@ -6,6 +6,7 @@ import { saveDB } from "./main/saveDB.js";
 import { saveCSV } from "./main/saveCSV.js";
 import { numPages } from "./main/numPages.js";
 import { runScraper } from "./main/runScraper.js";
+import { filterArray } from "./main/filterArray.js";
 import { displayMessage } from "./main/displayMessage.js";
 
 const baseUrl = "https://www.jobbank.gc.ca";
@@ -18,7 +19,8 @@ export const main = async (
   numberOfPages,
   saveToDb,
   saveToCSV,
-  sendEmails
+  sendEmails,
+  filterEmail
 ) => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
@@ -34,9 +36,15 @@ export const main = async (
   //clicks on the more results button to load more results
   await numPages(page, numberOfPages, timeout);
   
+  //scrapes the jobs from the page and adds them to the jobArray
   let jobArray = [];
   await runScraper(jobArray, page, baseUrl, browser);
 
+  //filters out duplicate emails
+  if(filterEmail) {
+    jobArray = await filterArray(jobArray, 'email');
+  }
+  
   //send emails using nodemailer
   if (sendEmails) {
     await sendMail(jobArray, timeout);
@@ -60,7 +68,7 @@ export const main = async (
     await saveCSV(jobArray, timeout);
     //close the browser and end the program
     goodbye();
-
+  
     //exit the program
     process.exit();
   }
