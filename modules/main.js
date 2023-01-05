@@ -1,13 +1,13 @@
 //Puppeteer allows you to control headless Chrome or Chromium over the DevTools Protocol.
 import puppeteer from "puppeteer";
-
-import { sendMail } from "./main/sendMail.js";
-import { saveDB } from "./main/saveDB.js";
-import { saveCSV } from "./main/saveCSV.js";
+import { displayMessage } from "./main/displayMessage.js";
 import { numPages } from "./main/numPages.js";
 import { runScraper } from "./main/runScraper.js";
 import { filterArray } from "./main/filterArray.js";
-import { displayMessage } from "./main/displayMessage.js";
+import { sendMail } from "./main/sendMail.js";
+import { saveDB } from "./main/saveDB.js";
+import { saveCSV } from "./main/saveCSV.js";
+import { cleanData } from "./main/cleanData.js";
 
 const baseUrl = "https://www.jobbank.gc.ca";
 //controls timeouts to avoid being blocked by the website
@@ -44,6 +44,9 @@ export const main = async (
   if(filterEmail) {
     jobArray = await filterArray(jobArray, 'email');
   }
+
+  //cleans the data
+  jobArray = await cleanData(jobArray);
   
   //send emails using nodemailer
   if (sendEmails) {

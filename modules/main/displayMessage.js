@@ -16,6 +16,6 @@ export const displayMessage = async (jobTitle, province, timeout, page) => {
   } else {
     console.log("Searching for all jobs in Canada 🇨🇦🍁🦫🏒");
   }
-  //set a timeout to see the message
+  //set a timeout to see the message and let the page load
   await page.waitForTimeout(timeout * 4);
 };

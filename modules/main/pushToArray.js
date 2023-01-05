@@ -1,10 +1,18 @@
 export const pushToArray = (jobArray, jobList, $, baseUrl) => {
-    //loop through the jobList and add scrape the data to the jobArray
+  //loop through the jobList and add scrape the data to the jobArray
   for (let i = 0; i < jobList.length; i++) {
-    const jobTitle = $(jobList[i]).find(".noctitle").text().split("\n")[0];
-    const list = $(jobList[i]).find(".list-unstyled");
-    const business = list.find(".business").text().split("\n")[0];
-    //let location = remove any white space
+    const jobTitle = $(jobList[i])
+      .find(".noctitle")
+      .text()
+      .split("\n")[0];
+
+    const list = $(jobList[i])
+      .find(".list-unstyled");
+
+    const business = list
+      .find(".business")
+      .text()
+      .split("\n")[0];
 
     const location = list
       .find(".location")
@@ -27,7 +35,6 @@ export const pushToArray = (jobArray, jobList, $, baseUrl) => {
       .filter((item) => item !== "")
       .join(", ");
 
-
     const jobUrl = baseUrl + $(jobList[i]).find("a").attr("href");
 
     jobArray.push({
@@ -43,4 +50,4 @@ export const pushToArray = (jobArray, jobList, $, baseUrl) => {
 
     console.log(i + 1 + " job(s) loaded");
   }
-}
+};
