@@ -15,12 +15,12 @@ export const sendMail = async (jobArray, timeout) => {
   const twitter = process.env.TWITTER;
   const profilePic = process.env.PROFILE_PIC;
   const skills = ["Websites", "Scraping", "Shopify", "Apps", "SEO", "Emails"];
-  const emailTitleLine1 = "Happy Holidays!";
-  const emailTitleLine2 = "Add me to your roster for 2023!";
+  const emailTitleLine1 = "Need software help?";
+  const emailTitleLine2 = "Add me to your roster";
 
   //email body message
   const message =
-    "I'm a software developer who offers a range of services customized to meet the specific needs of your business. From creating a professional website to data scraping";
+    "I'm a freelance software developer who is not afraid to get my hands dirty. Need a website, prototype, or app? I'm your guy!";
   //use the email.html file as a template for the email
   const template = fs.readFileSync("./email.html", "utf8");
 

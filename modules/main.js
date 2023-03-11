@@ -11,7 +11,7 @@ import { cleanData } from "./main/cleanData.js";
 
 const baseUrl = "https://www.jobbank.gc.ca";
 //controls timeouts to avoid being blocked by the website
-const timeout = Math.floor(Math.random() * 1000);
+const timeout = Math.floor(Math.random() * 500);
 
 export const main = async (
   jobTitle,
@@ -22,7 +22,7 @@ export const main = async (
   sendEmails,
   filterEmail
 ) => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
   await page.goto(baseUrl);
