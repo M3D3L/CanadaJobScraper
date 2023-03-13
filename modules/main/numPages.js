@@ -1,7 +1,4 @@
 export const numPages = async (page, numberOfPages, timeout) => {
-  await page.click("#searchButton");
-  await page.waitForSelector("#moreresultbutton");
-
   // click on the #moreresultbutton to load more results up to the numberOfPages
   for (let i = 0; i <= numberOfPages - 1; i++) {
     await page.waitForTimeout(timeout);

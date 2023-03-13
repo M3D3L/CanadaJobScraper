@@ -14,13 +14,13 @@ export const sendMail = async (jobArray, timeout) => {
   const linkedin = process.env.LINKEDIN;
   const twitter = process.env.TWITTER;
   const profilePic = process.env.PROFILE_PIC;
-  const skills = ["Websites", "Scraping", "Shopify", "Apps", "SEO", "Emails"];
-  const emailTitleLine1 = "Need software help?";
+  const skills = ["Multitasking", "Punctual", "Responsible", "Organized", "Teamw Player", "Analytical"];
+  const emailTitleLine1 = "Looking for an employee?";
   const emailTitleLine2 = "Add me to your roster";
 
   //email body message
   const message =
-    "I'm a freelance software developer who is not afraid to get my hands dirty. Need a website, prototype, or app? I'm your guy!";
+    "If you are sponsoring a work permit, and need a hard worker look no further. I am a native English speaker, fast learner, team player, and  willing to relocate anywhere. I am available to start immediately. Feel free to respond if you have any questions.";
   //use the email.html file as a template for the email
   const template = fs.readFileSync("./email.html", "utf8");
 

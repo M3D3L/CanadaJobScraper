@@ -11,7 +11,7 @@ import { cleanData } from "./main/cleanData.js";
 
 const baseUrl = "https://www.jobbank.gc.ca";
 //controls timeouts to avoid being blocked by the website
-const timeout = Math.floor(Math.random() * 500);
+const timeout = Math.floor(Math.random() * 1000);
 
 export const main = async (
   jobTitle,
